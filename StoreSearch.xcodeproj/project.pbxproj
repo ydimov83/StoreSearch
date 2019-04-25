@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9440AFFA22724F6B004D7633 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9440AFF922724F6B004D7633 /* SearchResult.swift */; };
 		949064F0227204620037B83B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949064EF227204620037B83B /* AppDelegate.swift */; };
 		949064F2227204620037B83B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949064F1227204620037B83B /* SearchViewController.swift */; };
 		949064F5227204620037B83B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 949064F3227204620037B83B /* Main.storyboard */; };
@@ -34,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9440AFF922724F6B004D7633 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		949064EC227204620037B83B /* StoreSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoreSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		949064EF227204620037B83B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		949064F1227204620037B83B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 			children = (
 				949064EF227204620037B83B /* AppDelegate.swift */,
 				949064F1227204620037B83B /* SearchViewController.swift */,
+				9440AFF922724F6B004D7633 /* SearchResult.swift */,
 				949064F3227204620037B83B /* Main.storyboard */,
 				949064F6227204650037B83B /* Assets.xcassets */,
 				949064F8227204650037B83B /* LaunchScreen.storyboard */,
@@ -257,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				949064F2227204620037B83B /* SearchViewController.swift in Sources */,
+				9440AFFA22724F6B004D7633 /* SearchResult.swift in Sources */,
 				949064F0227204620037B83B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
