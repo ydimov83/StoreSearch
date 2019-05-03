@@ -17,6 +17,7 @@
 		949064FA227204650037B83B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 949064F8227204650037B83B /* LaunchScreen.storyboard */; };
 		94906505227204650037B83B /* StoreSearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94906504227204650037B83B /* StoreSearchTests.swift */; };
 		94906510227204650037B83B /* StoreSearchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490650F227204650037B83B /* StoreSearchUITests.swift */; };
+		94C87D62227CB84D002486FC /* LoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94C87D61227CB84D002486FC /* LoadingCell.xib */; };
 		94E38E36227773D800892BDB /* SearchResultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94E38E35227773D800892BDB /* SearchResultCell.xib */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +55,7 @@
 		9490650B227204650037B83B /* StoreSearchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StoreSearchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9490650F227204650037B83B /* StoreSearchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreSearchUITests.swift; sourceTree = "<group>"; };
 		94906511227204650037B83B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94C87D61227CB84D002486FC /* LoadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingCell.xib; sourceTree = "<group>"; };
 		94E38E35227773D800892BDB /* SearchResultCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchResultCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,6 +109,7 @@
 			children = (
 				949064EF227204620037B83B /* AppDelegate.swift */,
 				949064F1227204620037B83B /* SearchViewController.swift */,
+				94C87D61227CB84D002486FC /* LoadingCell.xib */,
 				948F2F0522789D0F00D9D8E2 /* NothingFoundCell.xib */,
 				948F2F0322779D8800D9D8E2 /* SearchResultCell.swift */,
 				9440AFF922724F6B004D7633 /* SearchResult.swift */,
@@ -243,6 +246,7 @@
 			files = (
 				949064FA227204650037B83B /* LaunchScreen.storyboard in Resources */,
 				949064F7227204650037B83B /* Assets.xcassets in Resources */,
+				94C87D62227CB84D002486FC /* LoadingCell.xib in Resources */,
 				949064F5227204620037B83B /* Main.storyboard in Resources */,
 				948F2F0622789D0F00D9D8E2 /* NothingFoundCell.xib in Resources */,
 				94E38E36227773D800892BDB /* SearchResultCell.xib in Resources */,
