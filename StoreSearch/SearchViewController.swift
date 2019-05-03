@@ -21,14 +21,17 @@ class SearchViewController: UIViewController {
     var searchResults = [SearchResult]()
     var hasSearched = false
     var isLoading = false
+    var dataTask: URLSessionDataTask?
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.becomeFirstResponder()
-        tableView.contentInset = UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 108, left: 0, bottom: 0, right: 0)
         
         //Setup the SearchResultCell
         var cellNib = UINib(nibName: TableView.CellIdentifiers.searchResultCell, bundle: nil)
@@ -39,16 +42,6 @@ class SearchViewController: UIViewController {
         //Setup the LoadingCell
         cellNib = UINib(nibName: TableView.CellIdentifiers.loadingCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.loadingCell)
-    }
-    
-    func performStoreRequest(with url: URL) -> Data? {
-        do {
-            return try Data(contentsOf: url)
-        } catch {
-            print("Download error: \(error.localizedDescription)")
-            showNetworkError()
-            return nil
-        }
     }
     
     func parseData(data: Data) -> [SearchResult] {
@@ -70,10 +63,25 @@ class SearchViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    //MARK: - Actions
+    
+    @IBAction func segmentChanged(_ sender: UISegmentedControl) {
+        performSearch()
+    }
+    
     //MARK: - Helper Methods
-    func iTunesURL(searchText: String) -> URL {
+    func iTunesURL(searchText: String, categorySegment: Int) -> URL {
+        let kind: String
+        
+        switch categorySegment {
+            case 1: kind = "musicTrack"
+            case 2: kind = "software"
+            case 3: kind = "ebook"
+            default: kind = ""
+        }
+        
         let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        let urlString = String(format: "https://itunes.apple.com/search?limit=200&term=%@", encodedText)
+        let urlString = String(format: "https://itunes.apple.com/search?limit=200&term=%@&entity=%@", encodedText, kind)
         let url = URL(string: urlString)
         return url!
     }
@@ -84,28 +92,48 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        performSearch()
+    }
+    func performSearch() {
         if !searchBar.text!.isEmpty {
             searchBar.resignFirstResponder()
+            //Cancel any existing search request if user performs second search before first completes
+            dataTask?.cancel()
             isLoading = true
             tableView.reloadData()
             hasSearched = true
             searchResults = []
             
-            let queue = DispatchQueue.global()
-            let url = self.iTunesURL(searchText: searchBar.text!)
+            let url = iTunesURL(searchText: searchBar.text!, categorySegment: segmentedControl.selectedSegmentIndex)
+            let session = URLSession.shared
             
-            queue.async {
-                if let data = self.performStoreRequest(with: url) {
-                    self.searchResults = self.parseData(data: data)
-                    self.searchResults.sort { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+            dataTask = session.dataTask(
+                with: url, completionHandler: { data, response, error in
+                    if let error = error as? NSError, error.code == -999 {
+                        return //Search was canceled, quit
+                    } else if let httpResponse = response as? HTTPURLResponse,
+                        httpResponse.statusCode == 200 {
+                        if let data = data {
+                            self.searchResults = self.parseData(data: data)
+                            self.searchResults.sort(by: <)
+                            DispatchQueue.main.async {
+                                self.isLoading = false
+                                self.tableView.reloadData()
+                                //Since we're changing UI state in closure it has to go on main thread, hence the 'DispatchQueue.main'
+                            }
+                            return //Quit on success, this way we never call showNetworkError() below if attempt was successful
+                        }
+                    } else {
+                        print("Failure \(response!)")
+                    }
                     DispatchQueue.main.async {
-                        //Reloading data CANNOT be done on a background thread as it touches UI and UIKit prevents reloading data on non-main thread. To force the table to reload we simply create another closure and tell the main thread to reload the table data when it can
+                        self.hasSearched = false
                         self.isLoading = false
                         self.tableView.reloadData()
+                        self.showNetworkError()
                     }
-                    return
-                }
-            }
+            })
+            dataTask?.resume()
         }
     }
     
@@ -130,7 +158,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
+        
         if isLoading {
             let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.loadingCell, for: indexPath)
             
@@ -143,17 +171,11 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.searchResultCell, for: indexPath) as! SearchResultCell
             let searchResult = searchResults[indexPath.row]
             
-            cell.nameLabel.text = searchResult.name
+            cell.configure(for: searchResult)
             
-            if searchResult.artist.isEmpty {
-                cell.artistNameLabel.text = "Unknown"
-            } else {
-                cell.artistNameLabel.text = String(format: "%@ (%@)", searchResult.artist, searchResult.type)
-            }
-    
             return cell
         }
-
+        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

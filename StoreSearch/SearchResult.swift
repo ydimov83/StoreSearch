@@ -89,8 +89,8 @@ class SearchResult: Codable, CustomStringConvertible {
         return artistName ?? ""
     }
 }
-//
-//func < (lhs: SearchResult, rhs: SearchResult) -> Bool {
-//    return lhs.name.localizedStandardCompare(rhs.name) ==
-//        .orderedAscending
-//}
+
+func < (lhs: SearchResult, rhs: SearchResult) -> Bool {
+    return lhs.name.localizedStandardCompare(rhs.name) ==
+        .orderedAscending
+}
